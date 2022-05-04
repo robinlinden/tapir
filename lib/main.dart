@@ -59,9 +59,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Drink> _drinks = [];
 
-  void _addDrink() {
+  final _addDrinkFormKey = GlobalKey<FormState>();
+  final _nameInputController = TextEditingController();
+  final _volumeInputController = TextEditingController();
+  final _abvInputController = TextEditingController();
+
+  void _onAddDrink() {
     setState(() {
-      _drinks.add(Drink.random(_drinks.length));
+      final name = _nameInputController.text;
+      final volume = double.tryParse(_volumeInputController.text);
+      final abv = double.tryParse(_abvInputController.text);
+      if (volume == null || abv == null) {
+        return;
+      }
+
+      _nameInputController.clear();
+      _volumeInputController.clear();
+      _abvInputController.clear();
+      _drinks.add(Drink(name: name, volume: volume, abv: abv));
     });
   }
 
@@ -90,7 +105,83 @@ class _MyHomePageState extends State<MyHomePage> {
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addDrink,
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Padding(
+              padding: const EdgeInsets.all(8),
+              child: Form(
+                key: _addDrinkFormKey,
+                child: Column(
+                  children: [
+                    Text(
+                      'Add drink',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextFormField(
+                        key: const Key('name'),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (name) =>
+                            (name ?? '').isEmpty ? "Name can't be empty" : null,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Name',
+                        ),
+                        controller: _nameInputController,
+                        textInputAction: TextInputAction.next,
+                        autofocus: true,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextFormField(
+                        key: const Key('volume'),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (volume) => (volume ?? '').isEmpty
+                            ? "Volume can't be empty"
+                            : null,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Volume',
+                        ),
+                        controller: _volumeInputController,
+                        textInputAction: TextInputAction.next,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextFormField(
+                        key: const Key('abv'),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (abv) =>
+                            (abv ?? '').isEmpty ? "Abv can't be empty" : null,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'ABV',
+                        ),
+                        controller: _abvInputController,
+                        textInputAction: TextInputAction.done,
+                        onEditingComplete: () {
+                          _onAddDrink();
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                    ElevatedButton(
+                      child: const Text('Add'),
+                      onPressed: () {
+                        _onAddDrink();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
         tooltip: 'Drink!',
         child: const Icon(Icons.add),
       ),
