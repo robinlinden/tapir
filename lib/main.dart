@@ -47,6 +47,24 @@ class Drink {
   double get units => abv * volume * 1000 / 10;
 }
 
+class DrinkListItem extends StatelessWidget {
+  const DrinkListItem({Key? key, required this.drink}) : super(key: key);
+
+  final Drink drink;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(drink.name),
+        subtitle: Text('${(drink.volume * 100).round()}cl, '
+            '${(drink.abv * 100).round()}% '
+            '(${drink.units.toStringAsFixed(1)} units)'),
+      ),
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -90,18 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: _drinks.length,
         itemBuilder: ((context, index) {
           final drink = _drinks[index];
-          return Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Text(drink.name),
-                const Spacer(),
-                Text('${(drink.volume * 100).round()}cl, '
-                    '${(drink.abv * 100).round()}% '
-                    '(${drink.units.toStringAsFixed(1)} units)'),
-              ],
-            ),
-          );
+          return DrinkListItem(drink: drink);
         }),
       ),
       floatingActionButton: FloatingActionButton(
