@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   static const String title = 'Tapir';
 
   @override
@@ -48,7 +48,7 @@ class Drink {
 }
 
 class DrinkListItem extends StatelessWidget {
-  const DrinkListItem({Key? key, required this.drink}) : super(key: key);
+  const DrinkListItem({super.key, required this.drink});
 
   final Drink drink;
 
@@ -66,7 +66,7 @@ class DrinkListItem extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
