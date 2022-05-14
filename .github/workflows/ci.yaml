@@ -1,0 +1,104 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [master]
+
+env:
+  FLUTTER_VERSION: "3.0.0"
+
+jobs:
+  format:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter format . && git diff --exit-code
+
+  analyze:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter analyze .
+
+  android:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter build apk
+
+  linux:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build libgtk-3-dev
+    - run: flutter build linux
+
+  ios:
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter build ios --no-codesign
+
+  macos:
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter build macos
+
+  web:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter build web
+
+  windows:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+    - run: flutter build windows
