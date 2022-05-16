@@ -160,6 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: const EdgeInsets.all(16),
                       child: TextFormField(
                         key: const Key('volume'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: doubleValidator('Volume'),
                         decoration: const InputDecoration(
@@ -174,6 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: const EdgeInsets.all(16),
                       child: TextFormField(
                         key: const Key('abv'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: doubleValidator('Abv'),
                         decoration: const InputDecoration(
