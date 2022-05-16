@@ -74,6 +74,21 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+String? Function(String?) doubleValidator(String validates) {
+  return (String? value) {
+    value = value ?? '';
+    if (value.isEmpty) {
+      return "$validates can't be empty";
+    }
+
+    if (double.tryParse(value) == null) {
+      return '$validates must be a number';
+    }
+
+    return null;
+  };
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   final List<Drink> _drinks = [];
 
@@ -146,9 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: TextFormField(
                         key: const Key('volume'),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (volume) => (volume ?? '').isEmpty
-                            ? "Volume can't be empty"
-                            : null,
+                        validator: doubleValidator('Volume'),
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Volume',
@@ -162,8 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: TextFormField(
                         key: const Key('abv'),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (abv) =>
-                            (abv ?? '').isEmpty ? "Abv can't be empty" : null,
+                        validator: doubleValidator('Abv'),
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'ABV',
